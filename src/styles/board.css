@@ -1,0 +1,63 @@
+.board {
+  margin: auto;
+  max-width: 350px;
+}
+
+.board-columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #C4CBCA;
+  border-radius: 2px;
+  margin-top: 70px;
+}
+
+.board-column {
+  cursor: pointer;
+  width: 80px;
+  text-align: center;
+  position: relative;
+}
+
+.board-column.disabled {
+  cursor: default;
+}
+
+.board-column:not(.disabled):hover .pad-token {
+  opacity: 1;
+}
+
+.board-column.disabled .pad-token {
+  height: 0;
+}
+
+.column-tokens {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.token {
+  height: 50px;
+  width: 50px;
+  background-color: white;
+  border-radius: 30px;
+  margin: 15px auto;
+  border: 1px solid #aaa;
+  transition: 200ms ease all;
+}
+
+.token.User {
+  background-color: #219BD3;
+}
+
+.token.PC {
+  background-color: #D7263D;
+}
+
+.pad-token {
+  opacity: 0;
+  top: -72px;
+  transition: 100ms all ease;
+  position: absolute;
+  width: 100%;
+}
