@@ -10,26 +10,6 @@ export const getBoardSize = createSelector(getGame, game => game.size);
 export const isUserEven = createSelector(getGame, game => game.isEven);
 export const isUserMoveFailed = createSelector(getGame, game => game.isFailed);
 
-export const getUserMoves = createSelector(
-  [getMoves, isUserEven],
-  (moves, isUserEven) => {
-    return moves.filter((move, moveIndex) => {
-      const isMoveEven = isEven(moveIndex);
-      return isUserMove(isUserEven, isMoveEven);
-    });
-  }
-);
-
-export const getPCMoves = createSelector(
-  [getMoves, isUserEven],
-  (moves, isUserEven) => {
-    return moves.filter((move, moveIndex) => {
-      const isMoveEven = isEven(moveIndex);
-      return !isUserMove(isUserEven, isMoveEven);
-    });
-  }
-);
-
 export const getMovesByColumn = createSelector(
   [getMoves, isUserEven, getBoardSize],
   (moves, isUserEven, boardSize) => {
@@ -54,41 +34,36 @@ export const getMovesByColumn = createSelector(
 );
 
 export const getDiagonalWinner = createSelector(
-  [getMovesByColumn, isUserEven, getBoardSize],
-  (movesByColumn, isUserEven, boardSize) => {
+  [getMovesByColumn, getBoardSize],
+  (movesByColumn, boardSize) => {
     const columns = Object.values(movesByColumn);
-    const revColumns = columns.reverse();
+    const revColumns = [...columns].reverse();
+    let column = columns[0];
+    let rowBy = column[0];
     let noWinner = '';
+    let count = 0;
 
-    for (let i = 0; i < boardSize; i++) {
-      const column = columns[i];
-      const rowBy = column[0];
-      let count  = 0;
+    for (let i = 0; i < column.length; i++) {
+      if (columns[i][i] === rowBy) {
+        count++;
+      }
 
-      for (let j = 0; j < column.length; j++) {
-        if (columns[j][j] === rowBy) {
-          count++;
-        }
-
-        if (count === boardSize) {
-          return rowBy;
-        }
+      if (count === boardSize) {
+        return rowBy;
       }
     }
 
-    for (let i = 0; i < boardSize; i++) {
-      const column = revColumns[i];
-      const rowBy = column[i];
-      let count  = 0;
+    column = revColumns[0];
+    rowBy = column[0];
+    count = 0;
 
-      for (let j = 0; j < column.length; j++) {
-        if (revColumns[j][j] === rowBy) {
-          count++;
-        }
+    for (let i = 0; i < column.length; i++) {
+      if (revColumns[i][i] === rowBy) {
+        count++;
+      }
 
-        if (count === boardSize) {
-          return rowBy;
-        }
+      if (count === boardSize) {
+        return rowBy;
       }
     }
 
@@ -97,8 +72,8 @@ export const getDiagonalWinner = createSelector(
 );
 
 export const getRowWinner = createSelector(
-  [getMovesByColumn, isUserEven, getBoardSize],
-  (movesByColumn, isUserEven, boardSize) => {
+  [getMovesByColumn, getBoardSize],
+  (movesByColumn, boardSize) => {
     const columns = Object.values(movesByColumn);
     let noWinner = '';
 
@@ -123,14 +98,27 @@ export const getRowWinner = createSelector(
 );
 
 export const getColumnWinner = createSelector(
-  [getUserMoves, getPCMoves, isUserEven, getBoardSize],
-  (userMoves, pcMoves, isUserEven, boardSize) => {
-    const userSum = userMoves.reduce((acc, move) => reduceMove(acc, move, boardSize), {});
-    const pcSum = pcMoves.reduce((acc, move) => reduceMove(acc, move, boardSize), {});
-    const isUserWon = Object.values(userSum).find(v => v === true);
-    const isPcWon = Object.values(pcSum).find(v => v === true);
+  [getMovesByColumn, getBoardSize],
+  (movesByColumn, boardSize) => {
+    const noWinner = '';
 
-    return getWinnerName(isUserWon, isPcWon);
+    for (let i = 0; i < boardSize; i++) {
+      const column = movesByColumn[i];
+      const columnBy = column[0];
+      let count  = 0;
+
+      for (let j = 0; j < column.length; j++) {
+        if (column[j] === columnBy) {
+          count++;
+        }
+
+        if (count === boardSize) {
+          return columnBy;
+        }
+      }
+    }
+
+    return noWinner;
   }
 );
 
