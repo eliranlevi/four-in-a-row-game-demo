@@ -1,4 +1,4 @@
-import { USER_DID_MOVE, USER_RESET_GAME } from "../actionTypes/common";
+import { USER_DID_MOVE, USER_RESET_GAME, REMOVE_LAST_MOVE } from "../actionTypes/common";
 
 const moves = (state = [], action) => {
   switch (action.type) {
@@ -7,6 +7,9 @@ const moves = (state = [], action) => {
     }
     case USER_RESET_GAME: {
       return [];
+    }
+    case REMOVE_LAST_MOVE: {
+      return state.slice(0, state.length - 1);
     }
     default: {
       return state;

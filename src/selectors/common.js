@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { isUserMove, isEven, reduceMove, getWinnerName } from "../helpers";
+import { isUserMove, isEven } from "../helpers";
 
 const getGame = state => state.game;
 
@@ -24,7 +24,7 @@ export const getMovesByColumn = createSelector(
     for (let i = 0; i < boardSize; i++) {
       const colArr = movesByColumn[i] || [];
       const diff = boardSize - colArr.length;
-      const diffArr = Array(diff).fill('');
+      const diffArr = Array(diff).fill("");
 
       movesByColumn[i] = colArr.concat(diffArr);
     }
@@ -40,7 +40,7 @@ export const getDiagonalWinner = createSelector(
     const revColumns = [...columns].reverse();
     let column = columns[0];
     let rowBy = column[0];
-    let noWinner = '';
+    let noWinner = "";
     let count = 0;
 
     for (let i = 0; i < column.length; i++) {
@@ -48,7 +48,7 @@ export const getDiagonalWinner = createSelector(
         count++;
       }
 
-      if (count === boardSize) {
+      if (rowBy && count === boardSize) {
         return rowBy;
       }
     }
@@ -62,7 +62,7 @@ export const getDiagonalWinner = createSelector(
         count++;
       }
 
-      if (count === boardSize) {
+      if (rowBy && count === boardSize) {
         return rowBy;
       }
     }
@@ -75,7 +75,7 @@ export const getRowWinner = createSelector(
   [getMovesByColumn, getBoardSize],
   (movesByColumn, boardSize) => {
     const columns = Object.values(movesByColumn);
-    let noWinner = '';
+    let noWinner = "";
 
     for (let i = 0; i < boardSize; i++) {
       const column = columns[i];
@@ -87,7 +87,7 @@ export const getRowWinner = createSelector(
           count++;
         }
 
-        if (count === boardSize) {
+        if (rowBy && count === boardSize) {
           return rowBy;
         }
       }
@@ -100,7 +100,7 @@ export const getRowWinner = createSelector(
 export const getColumnWinner = createSelector(
   [getMovesByColumn, getBoardSize],
   (movesByColumn, boardSize) => {
-    const noWinner = '';
+    const noWinner = "";
 
     for (let i = 0; i < boardSize; i++) {
       const column = movesByColumn[i];
@@ -112,7 +112,7 @@ export const getColumnWinner = createSelector(
           count++;
         }
 
-        if (count === boardSize) {
+        if (columnBy && count === boardSize) {
           return columnBy;
         }
       }
@@ -146,6 +146,6 @@ export const isBoardFull = createSelector(
 export const isGameOver = createSelector(
   [isBoardFull, getWinner],
   (isBoardFull, winner) => (
-    winner !== '' || isBoardFull
+    winner !== "" || isBoardFull
   )
 );

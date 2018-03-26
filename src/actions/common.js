@@ -4,8 +4,9 @@ import {
   USER_SET_MODE,
   USER_MOVE_FAILED,
   USER_RESET_GAME,
+  REMOVE_LAST_MOVE,
 } from "../actionTypes/common";
-import { isLastMove, getMoves } from "../selectors/common";
+import { isLastMove, getMoves, getWinner } from "../selectors/common";
 import store from "../store";
 
 export const getNextMove = (userMove = []) => (
@@ -24,6 +25,12 @@ export const getNextMove = (userMove = []) => (
         type: USER_DID_MOVE,
         nextMoves,
       });
+
+      if (getWinner(store.getState()) === 'User') {
+        dispatch({
+          type: REMOVE_LAST_MOVE,
+        });
+      }
     } 
     catch (err) {
       dispatch({
