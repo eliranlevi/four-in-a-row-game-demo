@@ -2,12 +2,8 @@ import React from "react";
 
 const Token = ({
   by = "",
-}) => {
-  const getTokenClass = () => by || 'neutral';
-
-  return (
-    <div className={`token ${getTokenClass()}`}></div>
-  );
-};
+}) => (
+  <div className={`token ${by}`}></div>
+);
 
 export default Token;

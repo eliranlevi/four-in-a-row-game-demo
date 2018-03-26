@@ -23,7 +23,3 @@ export const getWinnerName = (isUserWon, isPcWon) => (
    ? 'PC'
    : ''
 );
-
-export const getColumnMoves = (columnNum, moves) => (
-  moves.filter(move => move === columnNum)
-);

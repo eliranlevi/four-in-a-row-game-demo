@@ -30,11 +30,95 @@ export const getPCMoves = createSelector(
   }
 );
 
-export const getDiagonalWinner = () => '';
+export const getMovesByColumn = createSelector(
+  [getMoves, isUserEven, getBoardSize],
+  (moves, isUserEven, boardSize) => {
+    const movesByColumn = moves.reduce((acc, move, index) => {
+      const moveBy = isUserMove(isUserEven, isEven(index)) ? "User" : "PC";
+      
+      acc[move] ? acc[move].push(moveBy) : acc[move] = [moveBy];
+
+      return acc;
+    }, {});
+
+    for (let i = 0; i < boardSize; i++) {
+      const colArr = movesByColumn[i] || [];
+      const diff = boardSize - colArr.length;
+      const diffArr = Array(diff).fill('');
+
+      movesByColumn[i] = colArr.concat(diffArr);
+    }
+
+    return movesByColumn;
+  }
+);
+
+export const getDiagonalWinner = createSelector(
+  [getMovesByColumn, isUserEven, getBoardSize],
+  (movesByColumn, isUserEven, boardSize) => {
+    const columns = Object.values(movesByColumn);
+    const revColumns = columns.reverse();
+    let noWinner = '';
+
+    for (let i = 0; i < boardSize; i++) {
+      const column = columns[i];
+      const rowBy = column[0];
+      let count  = 0;
+
+      for (let j = 0; j < column.length; j++) {
+        if (columns[j][j] === rowBy) {
+          count++;
+        }
+
+        if (count === boardSize) {
+          return rowBy;
+        }
+      }
+    }
+
+    for (let i = 0; i < boardSize; i++) {
+      const column = revColumns[i];
+      const rowBy = column[i];
+      let count  = 0;
+
+      for (let j = 0; j < column.length; j++) {
+        if (revColumns[j][j] === rowBy) {
+          count++;
+        }
+
+        if (count === boardSize) {
+          return rowBy;
+        }
+      }
+    }
+
+    return noWinner;
+  }
+);
 
 export const getRowWinner = createSelector(
-  [getUserMoves, getPCMoves, isUserEven, getBoardSize],
-  (userMoves, pcMoves, isUserEven, boardSize) => {
+  [getMovesByColumn, isUserEven, getBoardSize],
+  (movesByColumn, isUserEven, boardSize) => {
+    const columns = Object.values(movesByColumn);
+    let noWinner = '';
+
+    for (let i = 0; i < boardSize; i++) {
+      const column = columns[i];
+      const rowBy = column[i];
+      let count  = 0;
+
+      for (let j = 0; j < column.length; j++) {
+        if (columns[j][i] === rowBy) {
+          count++;
+        }
+
+        if (count === boardSize) {
+          return rowBy;
+        }
+      }
+    }
+
+    return noWinner;
   }
 );
 
@@ -64,11 +148,16 @@ export const isLastMove = createSelector(
   )
 );
 
-export const getBoardMoves = createSelector(
-  [getMoves, getWinner],
-  (moves, winner) => (
-    winner === 'User' 
-    ? moves.slice(0, moves.length - 1)
-    : moves
+export const isBoardFull = createSelector(
+  [getMoves, getBoardSize],
+  (moves, boardSize) => (
+    moves.length === Math.pow(boardSize, 2)
+  )
+);
+
+export const isGameOver = createSelector(
+  [isBoardFull, getWinner],
+  (isBoardFull, winner) => (
+    winner !== '' || isBoardFull
   )
 );

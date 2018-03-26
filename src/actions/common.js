@@ -5,13 +5,15 @@ import {
   USER_MOVE_FAILED,
   USER_RESET_GAME,
 } from "../actionTypes/common";
-import { isLastMove } from "../selectors/common";
+import { isLastMove, getMoves } from "../selectors/common";
 import store from "../store";
 
-export const getNextMove = (moves, userMove = []) => (
+export const getNextMove = (userMove = []) => (
   async dispatch => {
+    const state = store.getState();
+    const moves = getMoves(state)
+    const isFinalMove = isLastMove(state);
     let nextMoves = moves.concat(userMove);
-    const isFinalMove = isLastMove(store.getState());
   
     try {
       const resp = !isFinalMove && await fetch(constants.api(nextMoves));
