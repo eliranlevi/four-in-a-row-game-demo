@@ -15,7 +15,8 @@ class Board extends Component {
   render() {
     return (
       <div className={"board"}>
-        <h1>9DT</h1>
+        <h1>Four In A Row</h1>
+        <p>To Win: Get four tokens straight in a row/column/diagonal</p> 
         <MessageBar isUserMoveFailed={this.props.isUserMoveFailed}
                     isBoardFull={this.props.isBoardFull}
                     reset={this.reset} 

@@ -1,7 +1,5 @@
-import api from '../api';
-
 const constants = {
-  api,
+  boardSize: 4,
 };
 
 export default constants;

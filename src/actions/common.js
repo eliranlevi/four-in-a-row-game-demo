@@ -17,9 +17,9 @@ export const getNextMove = (userMove = []) => (
     let nextMoves = moves.concat(userMove);
   
     try {
-      const resp = !isFinalMove && await fetch(constants.api(nextMoves));
+      const resp = !isFinalMove && await constants.api(nextMoves);
 
-      nextMoves = isFinalMove ? nextMoves : await resp.json();
+      nextMoves = isFinalMove ? nextMoves : resp;
       
       dispatch({
         type: USER_DID_MOVE,

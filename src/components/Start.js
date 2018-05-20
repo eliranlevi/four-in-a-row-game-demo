@@ -16,7 +16,7 @@ class Start extends Component {
   render() {
     return (
       <div>
-        <h1>Welcome to 9DT</h1>
+        <h1>Welcome to Four in a Row demo</h1>
         <form onSubmit={this.onSubmit}>
           <div>
             Who's first?

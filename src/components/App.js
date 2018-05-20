@@ -9,6 +9,7 @@ const App = ({
     {mode === 'PLAY' 
      ? <BoardContainer /> 
      : <StartContainer />}
+     <p className='caption'>{ `With ♥ by Eliran Levi` }</p>
   </div>
 );
 
