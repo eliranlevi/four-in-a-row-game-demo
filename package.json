@@ -2,6 +2,7 @@
   "name": "four-in-a-row-demo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://eliranlevi.co/fourgame",
   "dependencies": {
     "npm": "^6.0.1",
     "react": "^16.2.0",
